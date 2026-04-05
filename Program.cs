@@ -2,7 +2,7 @@ using Inventario_Final.Formularios.Productos;
 
 namespace Inventario_Final
 {
-    internal static class CrearProducto
+    internal static class Program
     {
         /// <summary>
         ///  The main entry point for the application.
