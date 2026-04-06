@@ -30,6 +30,8 @@ namespace Inventario_Final.Servicios
                 return (false, "El nombre no puede estar vacío.");
             if (p.Stock < 0)
                 return (false, "El stock no puede ser negativo.");
+            if (p.Precio < 0)
+                return (false, "El precio no puede ser negativo.");
             _dao.Editar(p);
             return (true, "Producto actualizado correctamente.");
         }
