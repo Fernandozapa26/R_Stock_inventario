@@ -3,11 +3,17 @@ using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Text;
+using Inventario_Final.Datos.Entidades;
+using Microsoft.Data.SqlClient;
 
 
 
 namespace Inventario_Final.Datos.Productos
 {
+        /// <summary>
+    /// DAO de Productos - Integrante 1.
+    /// Estructura base para que el Integrante 1 implemente los métodos.
+    /// </summary>
     internal class ProductoDAO
     {
           string conexion = "Server=Fernandozapa26\\SQLDEVELOPER;Database=Stock_Manager;Trusted_Connection=True;TrustServerCertificate=True;";
@@ -35,46 +41,60 @@ namespace Inventario_Final.Datos.Productos
                 }
         }
     }
-       public List<Producto> Listar()
-{
-    List<Producto> lista = new List<Producto>();
-
-    using (SqlConnection conn = new SqlConnection(conexion))
-    {
-        conn.Open();
-
-                string query = @"SELECT p.id_producto,
-                        p.nombre,
-                        p.precio_costo,
-                        p.precio_venta,
-                        p.stock,
-                        p.id_categoria,
-                        c.nombre AS categoria_nombre
-                 FROM Productos p
-                 INNER JOIN Categorias c 
-                 ON p.id_categoria = c.id_categoria";
-
-                using (SqlCommand cmd = new SqlCommand(query, conn))
-        using (SqlDataReader reader = cmd.ExecuteReader())
+        public List<Producto> Listar()
         {
-            while (reader.Read())
+            var lista = new List<Producto>();
+            using var con = Conexion.ObtenerConexion();
+            con.Open();
+            using var cmd = new SqlCommand("SELECT Id, Nombre, Categoria, Precio, Stock FROM Productos ORDER BY Nombre", con);
+            using var dr = cmd.ExecuteReader();
+            while (dr.Read())
             {
-                        Producto p = new Producto();
-
-                        p.Id = Convert.ToInt32(reader["id_producto"]);
-                        p.Nombre = reader["nombre"].ToString();
-                        p.Precio_Costo = Convert.ToDecimal(reader["precio_costo"]);
-                        p.Precio_Venta = Convert.ToDecimal(reader["precio_venta"]);
-                        p.Stock = Convert.ToInt32(reader["stock"]);
-                        p.IdCategoria = Convert.ToInt32(reader["id_categoria"]);
-                        p.CategoriaNombre = reader["categoria_nombre"].ToString();
-
-                        lista.Add(p);
-                    }
+                lista.Add(new Producto
+                {
+                    Id        = dr.GetInt32(0),
+                    Nombre    = dr.GetString(1),
+                    Categoria = dr.IsDBNull(2) ? "" : dr.GetString(2),
+                    Precio    = dr.GetDecimal(3),
+                    Stock     = dr.GetInt32(4)
+                });
+            }
+            return lista;
         }
-    }
+        public void Insertar(Producto p)
+        {
+            using var con = Conexion.ObtenerConexion();
+            con.Open();
+            using var cmd = new SqlCommand(
+                "INSERT INTO Productos (Nombre, Categoria, Precio, Stock) VALUES (@n, @c, @p, @s)", con);
+            cmd.Parameters.AddWithValue("@n", p.Nombre);
+            cmd.Parameters.AddWithValue("@c", p.Categoria);
+            cmd.Parameters.AddWithValue("@p", p.Precio);
+            cmd.Parameters.AddWithValue("@s", p.Stock);
+            cmd.ExecuteNonQuery();
+        }
 
-    return lista;
-}
+        public void Editar(Producto p)
+        {
+            using var con = Conexion.ObtenerConexion();
+            con.Open();
+            using var cmd = new SqlCommand(
+                "UPDATE Productos SET Nombre=@n, Categoria=@c, Precio=@p, Stock=@s WHERE Id=@id", con);
+            cmd.Parameters.AddWithValue("@n",  p.Nombre);
+            cmd.Parameters.AddWithValue("@c",  p.Categoria);
+            cmd.Parameters.AddWithValue("@p",  p.Precio);
+            cmd.Parameters.AddWithValue("@s",  p.Stock);
+            cmd.Parameters.AddWithValue("@id", p.Id);
+            cmd.ExecuteNonQuery();
+        }
+
+        public void Eliminar(int id)
+        {
+            using var con = Conexion.ObtenerConexion();
+            con.Open();
+            using var cmd = new SqlCommand("DELETE FROM Productos WHERE Id=@id", con);
+            cmd.Parameters.AddWithValue("@id", id);
+            cmd.ExecuteNonQuery();
+        }
     }
 }

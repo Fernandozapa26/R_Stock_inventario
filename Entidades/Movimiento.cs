@@ -4,6 +4,9 @@ namespace Inventario_Final.Entidades
 {
 	public class Movimiento
 	{
+		public int Id { get; set; }
+
+		public string Tipo { get; set; } = string.Empty;
 		public int IdMovimiento { get; set; }
 		public int IdProducto { get; set; }
 		public string TipoMovimiento { get; set; } // "Entrada", "Salida", "Merma"
@@ -14,5 +17,11 @@ namespace Inventario_Final.Entidades
 
 		// Propiedad de navegación para mostrar el nombre en la tabla
 		public string NombreProducto { get; set; }
+		public int StockAnterior { get; set; }
+		public int StockNuevo { get; set; }
+
+		public string Observacion { get; set; } = string.Empty;
+
+		public string UsuarioResponsable { get; set; } = string.Empty;
 	}
 }

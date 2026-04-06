@@ -1,22 +1,25 @@
-using Inventario_Final.Formularios.Productos;
+using Inventario_Final.Formularios;
 
 namespace Inventario_Final
 {
     internal static class Program
     {
-        /// <summary>
-        ///  The main entry point for the application.
-        /// </summary>
         [STAThread]
         static void Main()
         {
-            // To customize application configuration such as set high DPI settings or default font,
-            // see https://aka.ms/applicationconfiguration.
             ApplicationConfiguration.Initialize();
             Application.Run(new FormSalidaProductos());
 
+            // Ciclo: al cerrar sesión vuelve al login
+            while (true)
+            {
+                var login = new FrmLogin();
 
+                if (login.ShowDialog() != DialogResult.OK || login.UsuarioActual is null)
+                    break; // Canceló → cerrar app
 
+                Application.Run(new FrmMenu(login.UsuarioActual));
+            }
         }
     }
 }
