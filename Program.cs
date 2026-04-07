@@ -1,4 +1,5 @@
-using Inventario_Final.Formularios.Productos;
+using Inventario_Final.Formularios;
+using Inventario_Final.Entidades;
 
 namespace Inventario_Final
 {
@@ -7,14 +8,19 @@ namespace Inventario_Final
         [STAThread]
         static void Main()
         {
-            // To customize application configuration such as set high DPI settings or default font,
-            // see https://aka.ms/applicationconfiguration.
             ApplicationConfiguration.Initialize();
 
-            // --- ELIGE CUÁL EJECUTAR ---
-
-
-
+            using (var frmLogin = new FrmLogin())
+            {
+                if (frmLogin.ShowDialog() == DialogResult.OK)
+                {
+                    Usuario? usuarioActual = frmLogin.UsuarioActual;
+                    if (usuarioActual != null)
+                    {
+                        Application.Run(new FrmMenu(usuarioActual));
+                    }
+                }
+            }
         }
     }
 }

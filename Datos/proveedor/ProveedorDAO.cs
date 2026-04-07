@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 using Microsoft.Data.SqlClient;
+using Inventario_Final.Entidades;
 
 
 namespace Inventario_Final.Datos.Proveedores

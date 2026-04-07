@@ -1,5 +1,6 @@
 ﻿using Inventario_Final.Datos.Productos;
 using Inventario_Final.Datos.Proveedores;
+using Inventario_Final.Entidades;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;

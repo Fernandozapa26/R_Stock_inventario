@@ -52,7 +52,7 @@ namespace Inventario_Final.Datos.Inventario
 
             using var cmd = new SqlCommand(sql, con);
             cmd.Parameters.AddWithValue("@prodId",   m.IdProducto);
-            cmd.Parameters.AddWithValue("@tipo",     m.Tipo);
+            cmd.Parameters.AddWithValue("@tipo",     m.TipoMovimiento);
             cmd.Parameters.AddWithValue("@cant",     m.Cantidad);
             cmd.Parameters.AddWithValue("@anterior", m.StockAnterior);
             cmd.Parameters.AddWithValue("@nuevo",    m.StockNuevo);
@@ -62,9 +62,9 @@ namespace Inventario_Final.Datos.Inventario
             cmd.ExecuteNonQuery();
         }
 
-        public List<Movimiento> ObtenerHistorialPorProducto(int productoId)
+        public List<Inventario_Final.Entidades.Movimiento> ObtenerHistorialPorProducto(int productoId)
         {
-            var lista = new List<Movimiento>();
+            var lista = new List<Inventario_Final.Entidades.Movimiento>();
             using var con = Conexion.ObtenerConexion();
             con.Open();
             const string sql = @"
@@ -82,9 +82,9 @@ namespace Inventario_Final.Datos.Inventario
             return lista;
         }
 
-        public List<Movimiento> ObtenerTodosLosMovimientos(DateTime? desde = null, DateTime? hasta = null)
+        public List<Inventario_Final.Entidades.Movimiento> ObtenerTodosLosMovimientos(DateTime? desde = null, DateTime? hasta = null)
         {
-            var lista = new List<Movimiento>();
+            var lista = new List<Inventario_Final.Entidades.Movimiento>();
             using var con = Conexion.ObtenerConexion();
             con.Open();
 
@@ -143,9 +143,9 @@ namespace Inventario_Final.Datos.Inventario
         private static Inventario_Final.Entidades.Movimiento MapearMovimiento(SqlDataReader dr) => new()
         {
             Id                 = dr.GetInt32(0),
-            ProductoId         = dr.GetInt32(1),
+            IdProducto         = dr.GetInt32(1),
             NombreProducto     = dr.GetString(2),
-            Tipo               = dr.GetString(3),
+            TipoMovimiento     = dr.GetString(3),
             Cantidad           = dr.GetInt32(4),
             StockAnterior      = dr.GetInt32(5),
             StockNuevo         = dr.GetInt32(6),

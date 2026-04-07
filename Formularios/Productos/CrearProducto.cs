@@ -1,6 +1,8 @@
 ﻿using Inventario_Final.Datos.categoria;
 using Inventario_Final.Datos.Productos;
 using Inventario_Final.Datos.Proveedores;
+using Inventario_Final.Entidades;
+using Inventario_Final.Servicios;
 using System;
 using System.Collections; //base de datos 
 using System.Collections.Generic;
@@ -10,7 +12,6 @@ using System.Data.SqlClient;
 using System.Drawing;
 using System.Text;
 using System.Windows.Forms;
-using Inventario_Final.Datos.Proveedores;
 
 namespace Inventario_Final.Formularios.Productos
 {
