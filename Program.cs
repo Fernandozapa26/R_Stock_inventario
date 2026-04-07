@@ -13,7 +13,10 @@ namespace Inventario_Final
             // To customize application configuration such as set high DPI settings or default font,
             // see https://aka.ms/applicationconfiguration.
             ApplicationConfiguration.Initialize();
-            Application.Run(new FormSalidaProductos());
+
+            Application.Run(new Formularios.Productos.CrearProducto());
+            //Application.Run(new Formularios.Categorias.FormCategoria());
+        
 
 
 
