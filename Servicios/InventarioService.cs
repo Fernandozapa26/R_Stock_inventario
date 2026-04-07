@@ -64,6 +64,7 @@ namespace Inventario_Final.Servicios
                 return (false, "Debe especificar el tipo de movimiento.");
 
             movimiento.Fecha = DateTime.Now;
+            // Aseguramos que el tipo sea correcto para el método
             _repo.RegistrarMovimiento(movimiento);
             return (true, "Movimiento registrado correctamente.");
         }

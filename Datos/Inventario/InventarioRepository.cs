@@ -40,7 +40,7 @@ namespace Inventario_Final.Datos.Inventario
 
         // ─── MOVIMIENTOS ───────────────────────────────────────────────────────
 
-        public void RegistrarMovimiento(Movimiento m)
+        public void RegistrarMovimiento(Inventario_Final.Entidades.Movimiento m)
         {
             using var con = Conexion.ObtenerConexion();
             con.Open();
@@ -51,7 +51,7 @@ namespace Inventario_Final.Datos.Inventario
                     (@prodId, @tipo, @cant, @anterior, @nuevo, @fecha, @obs, @usuario)";
 
             using var cmd = new SqlCommand(sql, con);
-            cmd.Parameters.AddWithValue("@prodId",   m.ProductoId);
+            cmd.Parameters.AddWithValue("@prodId",   m.IdProducto);
             cmd.Parameters.AddWithValue("@tipo",     m.Tipo);
             cmd.Parameters.AddWithValue("@cant",     m.Cantidad);
             cmd.Parameters.AddWithValue("@anterior", m.StockAnterior);
@@ -140,7 +140,7 @@ namespace Inventario_Final.Datos.Inventario
 
         // ─── PRIVADOS ──────────────────────────────────────────────────────────
 
-        private static Movimiento MapearMovimiento(SqlDataReader dr) => new()
+        private static Inventario_Final.Entidades.Movimiento MapearMovimiento(SqlDataReader dr) => new()
         {
             Id                 = dr.GetInt32(0),
             ProductoId         = dr.GetInt32(1),
