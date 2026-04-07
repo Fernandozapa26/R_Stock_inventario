@@ -16,7 +16,7 @@ namespace Inventario_Final.Formularios.Categorias
 
         public FormCategoria()
         {
-            
+
             InitializeComponent();
             ConstruirFormulario();
             CargarCategorias();
@@ -161,6 +161,9 @@ namespace Inventario_Final.Formularios.Categorias
             }
         }
 
+        private void FormCategoria_Load(object sender, EventArgs e)
+        {
 
+        }
     }
 }
