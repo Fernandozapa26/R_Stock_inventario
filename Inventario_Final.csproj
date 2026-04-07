@@ -7,7 +7,6 @@
     <UseWindowsForms>true</UseWindowsForms>
     <ImplicitUsings>enable</ImplicitUsings>
     <StartupObject>Inventario_Final.Program</StartupObject>
-        <AssemblyName>Inventario_Final</AssemblyName>
   </PropertyGroup>
 
   <ItemGroup>

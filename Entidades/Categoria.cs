@@ -1,5 +1,4 @@
-namespace Inventario_Final.Entidades
-{ 
+
     public class Categoria
     {
         public int Id { get; set; }  
@@ -8,4 +7,3 @@ namespace Inventario_Final.Entidades
         public string categoria { get; set; } = string.Empty;
         public string Estado { get; set; } = string.Empty;
     }
-}   
