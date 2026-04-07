@@ -1,4 +1,4 @@
-using Inventario_Final.Formularios;
+using Inventario_Final.Formularios.Productos;
 
 namespace Inventario_Final
 {
@@ -7,19 +7,14 @@ namespace Inventario_Final
         [STAThread]
         static void Main()
         {
+            // To customize application configuration such as set high DPI settings or default font,
+            // see https://aka.ms/applicationconfiguration.
             ApplicationConfiguration.Initialize();
-            Application.Run(new FormSalidaProductos());
 
-            // Ciclo: al cerrar sesión vuelve al login
-            while (true)
-            {
-                var login = new FrmLogin();
+            // --- ELIGE CUÁL EJECUTAR ---
 
-                if (login.ShowDialog() != DialogResult.OK || login.UsuarioActual is null)
-                    break; // Canceló → cerrar app
 
-                Application.Run(new FrmMenu(login.UsuarioActual));
-            }
+
         }
     }
 }

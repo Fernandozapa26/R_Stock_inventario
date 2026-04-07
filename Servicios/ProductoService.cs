@@ -4,7 +4,7 @@ using Inventario_Final.Entidades;
 namespace Inventario_Final.Servicios
 {
     /// <summary>
-    /// Servicio de Productos - Integrante 1.
+    /// Servicio de Productos - Integrante 1 
     /// </summary>
     public class ProductoService
     {
@@ -18,7 +18,8 @@ namespace Inventario_Final.Servicios
                 return (false, "El nombre no puede estar vacío.");
             if (p.Stock < 0)
                 return (false, "El stock no puede ser negativo.");
-            if (p.Precio < 0)
+
+            if (p.Precio < 0 && p.Precio_Costo < 0)
                 return (false, "El precio no puede ser negativo.");
             _dao.Insertar(p);
             return (true, "Producto creado correctamente.");
@@ -30,12 +31,18 @@ namespace Inventario_Final.Servicios
                 return (false, "El nombre no puede estar vacío.");
             if (p.Stock < 0)
                 return (false, "El stock no puede ser negativo.");
-            if (p.Precio < 0)
+            if (p.Precio < 0 && p.Precio_Costo < 0)
                 return (false, "El precio no puede ser negativo.");
             _dao.Editar(p);
             return (true, "Producto actualizado correctamente.");
         }
 
         public void Eliminar(int id) => _dao.Eliminar(id);
+
+        // Función extra de la otra rama
+        public bool stockValidar(int Stock)
+        {
+            return Stock >= 0;
+        }
     }
-}
+    }

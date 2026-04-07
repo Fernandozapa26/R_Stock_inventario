@@ -1,6 +1,6 @@
-﻿namespace Inventario_Final.Formularios.Categorias
+﻿namespace Inventario_Final.Formularios
 {
-    partial class FormCategoria
+    partial class formProveedor
     {
         /// <summary>
         /// Required designer variable.
@@ -30,14 +30,14 @@
         {
             SuspendLayout();
             // 
-            // FormCategoria
+            // formProveedor
             // 
             AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(800, 450);
-            Name = "FormCategoria";
-            Text = "FormCategoria";
-            Load += FormCategoria_Load;
+            Name = "formProveedor";
+            Text = "formProveedor";
+            Load += formProveedor_Load;
             ResumeLayout(false);
         }
 

@@ -1,4 +1,6 @@
-﻿using Inventario_Final.Datos.Productos;
+﻿using Inventario_Final.Datos.categoria;
+using Inventario_Final.Datos.Productos;
+using Inventario_Final.Datos.Proveedores;
 using System;
 using System.Collections; //base de datos 
 using System.Collections.Generic;
@@ -8,35 +10,42 @@ using System.Data.SqlClient;
 using System.Drawing;
 using System.Text;
 using System.Windows.Forms;
-using Inventario_Final.Datos.categoria;
+using Inventario_Final.Datos.Proveedores;
 
 namespace Inventario_Final.Formularios.Productos
 {
     public partial class CrearProducto : Form
     {
-        string conexion = "Server=localhost;Database=Stock_Manager;Trusted_Connection=True;";
 
         ProductoDAO daoProducto = new ProductoDAO();
         List<Producto> productos;
+        int idProduct;
+        ProductoService serviceProducto = new ProductoService();
 
         // aquí
         private void btnGuardar_Click(object sender, EventArgs e)
         {
-
             try
             {
-             
+
                 Producto produc = new Producto();
                 produc.Nombre = txtNombre.Text;
                 produc.Precio_Costo = decimal.Parse(txtPrecio.Text);
                 produc.Precio_Venta = decimal.Parse(txtPrecioVenta.Text);
                 produc.Stock = int.Parse(txtStock.Text);
 
+                produc.IdProveedor = Convert.ToInt32(cbProveedor.SelectedValue);
                 produc.IdCategoria = Convert.ToInt32(cbCategoria.SelectedValue);
 
-
-                daoProducto.Guardar(produc);
-                MessageBox.Show("Registro guardado correctamente");
+                Boolean valiStock = serviceProducto.stockValidar(produc.Stock);
+                if (valiStock == true){
+                    daoProducto.Guardar(produc);
+                    MessageBox.Show("Registro guardado correctamente");
+                } else {
+                    MessageBox.Show("Stock incorrecto");
+                }
+           
+                
 
                 CargarProductos();
                 
@@ -59,7 +68,26 @@ namespace Inventario_Final.Formularios.Productos
 
         private void btnEditar_Click(object sender, EventArgs e)
         {
-            MessageBox.Show("Editando producto...");
+            try
+            {
+                Producto produc = new Producto();
+                produc.Id_producto = idProduct; // importante
+                produc.Nombre = txtNombre.Text;
+                produc.Precio_Costo = decimal.Parse(txtPrecio.Text);
+                produc.Precio_Venta = decimal.Parse(txtPrecioVenta.Text);
+                produc.Stock = int.Parse(txtStock.Text);
+                produc.IdCategoria = Convert.ToInt32(cbCategoria.SelectedValue);
+
+                daoProducto.EditarProducto(produc);
+
+                MessageBox.Show("Producto editado correctamente");
+
+                CargarProductos();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Error al editar: " + ex.Message);
+            }
         }
 
         private void CargarCategorias()
@@ -71,42 +99,69 @@ namespace Inventario_Final.Formularios.Productos
             cbCategoria.ValueMember = "Id";       // valor real (ID)
         }
 
-        private void btnEliminar_Click(object sender, EventArgs e)
+        private void CargarProveedores()
         {
-            MessageBox.Show("Eliminando producto...");
+            ProveedorDAO dao = new ProveedorDAO();
+
+            cbProveedor.DataSource = dao.Listar();
+            cbProveedor.DisplayMember = "NombreEmpresa";
+            cbProveedor.ValueMember = "Id_proveedor";
+
         }
 
-        private void Limpiar(object sender, EventArgs e)
+        private void btnEliminar_Click(object sender, EventArgs e)
         {
-            MessageBox.Show("Limpiar producto...");
+            daoProducto.EliminarProducto(idProduct);
+            CargarProductos();
+            MessageBox.Show("Eliminando producto...");
+        }
+        private void btnLimpiar_Click(object sender, EventArgs e)
+        {
+            LimpiarCampos();
+        }
+
+        private void LimpiarCampos()
+        {
+            txtNombre.Clear();
+            txtPrecio.Clear();
+            txtPrecioVenta.Clear();
+            txtStock.Clear();
+            cbCategoria.SelectedIndex = -1;
+            idProduct = 0;
+            dgvProductos.ClearSelection();
+            txtNombre.Focus();
         }
         private void dgvProductos_CellClick(object sender, DataGridViewCellEventArgs e)
         {
             int index = e.RowIndex;
-
+            idProduct = productos[index].Id_producto;
             txtNombre.Text = productos[index].Nombre;
             txtPrecio.Text = productos[index].Precio_Costo.ToString();
             txtPrecioVenta.Text = productos[index].Precio_Venta.ToString();
             txtStock.Text = productos[index].Stock.ToString();
+            
 
         }
-
-        public Label lblTitulo;
+        
+        public Label lblTitulo ;
+        public Label lblProveedor ;
         public Label lblNombre;
-        public Label lblPrecio;
-        public Label lblPrecioVenta;
+        public Label lblPrecio ;
+        public Label lblPrecioVenta ;
         public Label lblStock;
-        public Label lblCategoria;
-        public TextBox txtNombre;
-        public TextBox txtPrecio;
-        public TextBox txtPrecioVenta;
-        public TextBox txtStock;
-        public ComboBox cbCategoria;
-        public Button btnGuardar;
+        public Label lblCategoria ;
+        public TextBox txtNombre ;
+        public TextBox txtPrecio ;
+        public TextBox txtPrecioVenta ;
+        public TextBox txtStock ;
+        public ComboBox cbCategoria ;
+        public Button btnGuardar ;
         public Button btnEditar;
-        public Button btnEliminar;
-        public Button btnLimpiar;
-        public DataGridView dgvProductos;
+        public Button btnEliminar ;
+        public Button btnLimpiar ;
+        public DataGridView dgvProductos ;
+        public ComboBox cbProveedor ;
+
 
         public CrearProducto()
         {
@@ -114,6 +169,7 @@ namespace Inventario_Final.Formularios.Productos
             Constructor();
             CargarProductos();
             CargarCategorias();
+            CargarProveedores();
 
         }
 
@@ -153,6 +209,12 @@ namespace Inventario_Final.Formularios.Productos
             lblStock = new Label();
             this.lblStock.Text = "Stock:";
             this.lblStock.Location = new System.Drawing.Point(30, 220);
+          
+            this.lblStock.BackColor = System.Drawing.Color.LightYellow;
+
+            lblProveedor = new Label();
+            this.lblProveedor.Text = "Proveedor:";
+            this.lblProveedor.Location = new System.Drawing.Point(30, 260);
 
 
             // 🔹 TEXTBOX
@@ -179,6 +241,10 @@ namespace Inventario_Final.Formularios.Productos
             this.cbCategoria.Location = new System.Drawing.Point(140, 100);
             this.cbCategoria.Size = new System.Drawing.Size(200, 23);
 
+            cbProveedor = new ComboBox();
+            this.cbProveedor.Location = new System.Drawing.Point(140, 260);
+            this.cbProveedor.Size = new System.Drawing.Size(200, 23);
+
             // 🔹 BOTONES
             btnGuardar = new Button();
             this.btnGuardar.Text = "Guardar";
@@ -201,13 +267,13 @@ namespace Inventario_Final.Formularios.Productos
             btnLimpiar = new Button();
             this.btnLimpiar.Text = "Limpiar";
             this.btnLimpiar.Location = new System.Drawing.Point(400, 180);
-            this.btnLimpiar.Click += new System.EventHandler(this.Limpiar);
+            this.btnLimpiar.Click += new System.EventHandler(this.btnLimpiar_Click);
             this.btnLimpiar.Size = new System.Drawing.Size(100, 33);
 
             // 🔹 DATAGRIDVIEW
             dgvProductos = new DataGridView();
             this.dgvProductos.Location = new System.Drawing.Point(60, 360);
-            this.dgvProductos.Size = new System.Drawing.Size(740, 230);
+            this.dgvProductos.Size = new System.Drawing.Size(840, 230);
             this.dgvProductos.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
             this.dgvProductos.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvProductos_CellClick);
 
@@ -219,6 +285,7 @@ namespace Inventario_Final.Formularios.Productos
             this.Controls.Add(this.lblPrecio);
             this.Controls.Add(this.lblPrecioVenta);
             this.Controls.Add(this.lblStock);
+            this.Controls.Add(this.lblProveedor);
 
             this.Controls.Add(this.txtNombre);
             this.Controls.Add(this.txtPrecio);
@@ -231,6 +298,7 @@ namespace Inventario_Final.Formularios.Productos
             this.Controls.Add(this.btnEditar);
             this.Controls.Add(this.btnEliminar);
             this.Controls.Add(this.btnLimpiar);
+            this.Controls.Add(this.cbProveedor);
 
             this.Controls.Add(this.dgvProductos);
 
