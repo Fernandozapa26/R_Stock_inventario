@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
+using Inventario_Final.Entidades;
 
 namespace Inventario_Final.Datos.categoria
 {

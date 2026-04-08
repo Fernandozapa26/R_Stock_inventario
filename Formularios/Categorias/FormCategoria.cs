@@ -1,4 +1,5 @@
 ﻿using Inventario_Final.Datos.categoria;
+using Inventario_Final.Entidades;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
