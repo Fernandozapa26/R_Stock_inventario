@@ -54,6 +54,40 @@ namespace Inventario_Final.Datos.Productos
              
         }
 
+        public Producto BuscarProducto(int idProduct)
+        {
+            using (SqlConnection conm = new SqlConnection(conexion))
+            {
+                conm.Open();
+
+                string query = "SELECT * FROM Productos WHERE id_producto = @id_producto";
+                using (SqlCommand cmd = new SqlCommand(query, conm))
+                {
+                    cmd.Parameters.AddWithValue("@id_producto", idProduct);
+
+                    using (SqlDataReader reader = cmd.ExecuteReader())
+                    {
+
+
+                        if (reader.Read()) // si encontró un registro
+                        {
+                            Producto p = new Producto();
+
+                            p.Id_producto = (int)reader["id_producto"];
+                            p.Nombre = reader["nombre"].ToString();
+                            p.Precio_Costo = (decimal)reader["precio_costo"];
+                            p.Precio_Venta = (decimal)reader["precio_venta"];
+                            p.Stock = (int)reader["stock"];
+
+                            return p;
+                        }
+                    }
+                }
+            }
+
+            return null;
+        }
+
         public void EditarProducto(Producto producto)
 {
     using (SqlConnection conn = new SqlConnection(conexion))

@@ -7,7 +7,7 @@ namespace Inventario_Final.Datos.Movimiento
     public class MovimientoDAO
     {
         // cadena de conexión local
-        string cadena = "Server=(localdb)\\MSSQLLocalDB;Database=Stock_Manager;Trusted_Connection=True;";
+        string cadena = "Server=Fernandozapa26\\SQLDEVELOPER;Database=Stock_Manager;Trusted_Connection=True;TrustServerCertificate=True;";
 
         public bool RegistrarMovimiento(Entidades.Movimiento mov)
         {
@@ -34,7 +34,7 @@ namespace Inventario_Final.Datos.Movimiento
                         // Actualizar el stock en la tabla Productos
                         // Si es Entrada suma (+), si es Salida o Merma resta (-)
                         string operador = (mov.TipoMovimiento == "Entrada") ? "+" : "-";
-                        string sqlStock = $"UPDATE Productos SET stock_actual = stock_actual {operador} @cant WHERE id_producto = @id";
+                        string sqlStock = $"UPDATE Productos SET stock = stock {operador} @cant WHERE id_producto = @id";
 
                         using (SqlCommand cmd2 = new SqlCommand(sqlStock, conn, trans))
                         {

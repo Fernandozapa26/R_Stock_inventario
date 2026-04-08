@@ -23,13 +23,20 @@ namespace Inventario_Final
             // --- ELIGE CUÁL EJECUTAR ---
 
             // 1. Para probar Entradas:
-            //Application.Run(new FrmEntradaProductos());
+            Application.Run(new FrmEntradaProductos());
 
             // 2. Para probar Salidas (Ventas):
-            // Application.Run(new FormSalidaProductos());
+             Application.Run(new FormSalidaProductos());
 
             // 3. Para probar Mermas:
             Application.Run(new FormMerma());
+
+            //4. Probar Productos
+            //Application.Run(new Formularios.Productos.CrearProducto());
+
+            //5. Probar Proveedores
+            //Application.Run(new Formularios.formProveedor());
+
         }
     }
 }
