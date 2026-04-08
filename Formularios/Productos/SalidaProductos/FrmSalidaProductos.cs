@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Windows.Forms;
+using Inventario_Final.Datos.Productos;
 using Inventario_Final.Entidades;
 using Inventario_Final.Servicios;
 
@@ -60,13 +61,25 @@ namespace Inventario_Final.Formularios.SalidaProductos
                     IdProducto = int.Parse(txtIdProducto.Text),
                     Cantidad = int.Parse(txtCantidad.Text),
                     Costo = decimal.Parse(txtCosto.Text),
-                    TipoMovimiento = "Salida", 
+                    TipoMovimiento = "Salida",
                     Fecha = DateTime.Now
                 };
 
                 InventarioService service = new InventarioService();
-                string res = service.ProcesarMovimiento(mov);
-                MessageBox.Show(res == "Éxito" ? "¡Venta registrada y stock actualizado!" : res);
+                ProductoDAO productoDAO = new ProductoDAO();
+                int idProducto = int.Parse(txtIdProducto.Text);
+                int stock = productoDAO.BuscarProducto(idProducto).Stock;
+                if (stock - int.Parse(txtCantidad.Text) >= 0)
+                {
+                    string res = service.ProcesarMovimiento(mov);
+                    MessageBox.Show(res == "Éxito" ? "¡Venta registrada y stock actualizado!" : res);
+                }
+                else
+                {
+                    MessageBox.Show("No existe stock suficiente");
+                }
+
+
             }
             catch (Exception ex) { MessageBox.Show("Error: " + ex.Message); }
         }
